@@ -2,6 +2,12 @@ const app =require( "./app");
 const dotenv=require("dotenv")
 const mongoose=require("mongoose")
 
+//handeling uncaught exception
+process.on("uncaughtException",(err)=>{
+    console.log(`Error:${err.message}`);
+    console.log(`shuting down the server due to uncaught exception`);
+    process.exit(1)
+})
 
 
 
@@ -21,3 +27,13 @@ mongoose.connect(
         else console.log("Database connected");
     }
 )
+
+//unhsndeled promise rejection
+process.on("unhandledRejection",err=>{
+    console.log(`Error:$(err.message)`);
+    console.log(`shuttong down the server due to unhadeled promise rejection `);
+
+    server.close(()=>{
+        process.exit(1);
+    })
+}) 
